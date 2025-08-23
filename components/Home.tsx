@@ -6,6 +6,57 @@ const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
     event.currentTarget.classList.add('loaded');
 };
 
+// Language content - moved to top level for global access
+const content = {
+    en: {
+        userName: "Tang Hao's Tech Blog",
+        userBio: "Welcome to my corner of the internet! I'm a software engineer, with a passion for all technologies. This is a bilingual tech blog where I share my thoughts, learnings, and everything in between.",
+        latestUpdate: "Latest update:",
+        loading: "Loading...",
+        error: "Post not found.",
+        readBlogPost: "Read blog post:",
+        bannerImage: "Banner image for",
+        lastUpdated: "Last updated:"
+    },
+    zh: {
+        userName: "唐浩的技术博客",
+        userBio: "欢迎来到我的网络角落！我是一名软件工程师，对技术充满热情。这是一个双语技术博客，我在这里分享我的想法、学习心得以及一切相关的内容。",
+        latestUpdate: "最新更新：",
+        loading: "加载中...",
+        error: "文章未找到。",
+        bannerImage: "横幅图片：",
+        lastUpdated: "最后更新："
+    }
+};
+
+// Language context
+const LanguageContext = React.createContext('en');
+
+// Language hook
+const useLanguage = () => {
+    const [lang, setLang] = React.useState(() => {
+        return document.documentElement.getAttribute('data-lang') || 'en';
+    });
+
+    React.useEffect(() => {
+        const handleLanguageChange = () => {
+            const newLang = document.documentElement.getAttribute('data-lang') || 'en';
+            setLang(newLang);
+        };
+
+        // Listen for language changes
+        const observer = new MutationObserver(handleLanguageChange);
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-lang']
+        });
+
+        return () => observer.disconnect();
+    }, []);
+
+    return lang;
+};
+
 // A simple markdown to JSX parser
 const parseMarkdown = (markdown: string): React.ReactNode => {
     const lines = markdown.split('\n');
@@ -26,20 +77,41 @@ const parseMarkdown = (markdown: string): React.ReactNode => {
 
 interface HomeProps {
     slug?: string;
+    lang?: string; // Add language parameter
 }
 
-export const Home: React.FC<HomeProps> = ({ slug }) => {
+export const Home: React.FC<HomeProps> = ({ slug, lang }) => {
     if (slug) {
-        return <BlogPostView slug={slug} />;
+        return <BlogPostView slug={slug} lang={lang} />;
     } else {
-        return <HomeAndBlogView />;
+        return <HomeAndBlogView lang={lang} />;
     }
 };
 
-const HomeAndBlogView: React.FC = () => {
+const HomeAndBlogView: React.FC<{ lang?: string }> = ({ lang }) => {
+    // Use language from URL parameter, fallback to stored preference
+    const [currentLang, setCurrentLang] = React.useState(() => {
+        if (lang && (lang === 'en' || lang === 'zh')) {
+            return lang;
+        }
+        return document.documentElement.getAttribute('data-lang') || 'en';
+    });
+    
+    // Update document language when component mounts or lang changes
+    React.useEffect(() => {
+        if (lang && (lang === 'en' || lang === 'zh')) {
+            setCurrentLang(lang);
+            document.documentElement.setAttribute('data-lang', lang);
+            localStorage.setItem('language', lang);
+        }
+    }, [lang]);
+    
+    // Filter posts by current language
+    const filteredPosts = posts.filter(post => post.language === currentLang);
+    
     // User can change these details
-    const userName = "Tang Hao's Tech Blog";
-    const userBio = "Welcome to my corner of the internet! I'm a software engineer, with a passion for all technologies. This is a bilingual tech blog where I share my thoughts, learnings, and everything in between.";
+    const userName = content[currentLang].userName;
+    const userBio = content[currentLang].userBio;
     const profileImageUrl = "/assets/profile.jpg";
     
     // Drawer state
@@ -88,7 +160,7 @@ const HomeAndBlogView: React.FC = () => {
                     <h3></h3>
                 </div>
                 <div className="sidebar-content">
-                    {posts.map((postItem, index) => (
+                    {filteredPosts.map((postItem, index) => (
                         <span 
                             key={postItem.slug} 
                             className="sidebar-item"
@@ -121,44 +193,51 @@ const HomeAndBlogView: React.FC = () => {
                 <div className="container">
                     {/* Blog Section */}
                     <section className="blog-section">
-                        <div className="blog-list-single-column">
-                            {posts.map((post, index) => (
-                                <div 
-                                    key={post.slug} 
-                                    id={`post-${post.slug}`} 
-                                    className="post-container animate-scale-in"
-                                    style={{
-                                        animationDelay: `${index * .2}s`,
-                                        animation: 'scaleIn 0.6s ease-out forwards',
-                                        opacity: 0
-                                    }}
-                                >
-                                    <a 
-                                        href={`#/blog/${post.slug}`} 
-                                        className="post-card-single"
-                                        aria-label={`Read blog post: ${post.title}`}
-                                        role="article"
-                                        tabIndex={0}
+                        {filteredPosts.length === 0 ? (
+                            <div className="no-posts-message">
+                                <h3>{currentLang === 'zh' ? '暂无博客文章' : 'No blog posts available'}</h3>
+                                <p>{currentLang === 'zh' ? '当前语言下还没有博客文章。' : 'No blog posts are available in the current language.'}</p>
+                            </div>
+                        ) : (
+                            <div className="blog-list-single-column">
+                                {filteredPosts.map((post, index) => (
+                                    <div 
+                                        key={`${post.slug}-${currentLang}`} // Force re-render on language change
+                                        id={`post-${post.slug}`} 
+                                        className="post-container animate-scale-in"
+                                        style={{
+                                            animationDelay: `${index * 0.2}s`,
+                                            animation: 'scaleIn 0.6s ease-out forwards',
+                                            opacity: 0
+                                        }}
                                     >
-                                        <img 
-                                            src={post.bannerImagePath} 
-                                            alt={`Banner image for ${post.title}`}
-                                            className="post-card-banner" 
-                                            onLoad={handleImageLoad}
-                                        />
-                                        <div className="post-card-content">
-                                            <h3>{post.title}</h3>
-                                            <p>{post.shortDescription}</p>
-                                            <div className="post-meta">
-                                                <span className="latest-update" aria-label={`Last updated: ${post.latestUpdate}`}>
-                                                    Latest update: {post.latestUpdate}
-                                                </span>
+                                        <a 
+                                            href={`#/blog/${post.slug}`} 
+                                            className="post-card-single"
+                                            aria-label={`${content[currentLang].readBlogPost} ${post.title}`}
+                                            role="article"
+                                            tabIndex={0}
+                                        >
+                                            <img 
+                                                src={post.bannerImagePath} 
+                                                alt={`${content[currentLang].bannerImage} ${post.title}`}
+                                                className="post-card-banner" 
+                                                onLoad={handleImageLoad}
+                                            />
+                                            <div className="post-card-content">
+                                                <h3>{post.title}</h3>
+                                                <p>{post.shortDescription}</p>
+                                                <div className="post-meta">
+                                                    <span className="latest-update" aria-label={`${content[currentLang].lastUpdated} ${post.latestUpdate}`}>
+                                                        {content[currentLang].latestUpdate} {post.latestUpdate}
+                                                    </span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            ))}
-                        </div>
+                                        </a>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </section>
                 </div>
             </main>
@@ -166,25 +245,41 @@ const HomeAndBlogView: React.FC = () => {
     );
 };
 
-const BlogPostView: React.FC<{ slug: string }> = ({ slug }) => {
+const BlogPostView: React.FC<{ slug: string; lang?: string }> = ({ slug, lang }) => {
     const [post, setPost] = React.useState<Post | undefined>(undefined);
-    const [content, setContent] = React.useState<React.ReactNode | null>(null);
+    const [postContent, setPostContent] = React.useState<React.ReactNode | null>(null);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);
+    
+    // Use language from URL parameter or post language
+    const [currentLang, setCurrentLang] = React.useState(() => {
+        if (lang && (lang === 'en' || lang === 'zh')) {
+            return lang;
+        }
+        return document.documentElement.getAttribute('data-lang') || 'en';
+    });
 
     React.useEffect(() => {
-        const currentPost = posts.find(p => p.slug === slug);
-        if (!currentPost) {
-            setError('Post not found.');
+        // Find the post by slug
+        const foundPost = posts.find(p => p.slug === slug);
+        if (!foundPost) {
+            setError(content[currentLang].error);
             setLoading(false);
             return;
         }
         
-        setPost(currentPost);
+        // Set the post and update language to match post language
+        setPost(foundPost);
+        setCurrentLang(foundPost.language);
+        
+        // Update document language to match post
+        document.documentElement.setAttribute('data-lang', foundPost.language);
+        localStorage.setItem('language', foundPost.language);
+        
         setLoading(true);
         setError(null);
         
-        fetch(currentPost.markdownPath)
+        fetch(foundPost.markdownPath)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`Failed to load post content: ${response.statusText}`);
@@ -192,7 +287,7 @@ const BlogPostView: React.FC<{ slug: string }> = ({ slug }) => {
                 return response.text();
             })
             .then(text => {
-                setContent(parseMarkdown(text));
+                setPostContent(parseMarkdown(text));
                 setLoading(false);
             })
             .catch(err => {
@@ -200,14 +295,20 @@ const BlogPostView: React.FC<{ slug: string }> = ({ slug }) => {
                 setLoading(false);
             });
 
-    }, [slug]);
+    }, [slug, lang]);
 
     if (loading) return (
         <div className="container">
-            <div className="loading"></div>
+            <div className="loading">{content[currentLang].loading}</div>
         </div>
     );
-    if (error) return <div className="container error">{error}</div>;
+    if (error) return (
+        <div className="container">
+            <div className="error">
+                <p>{error}</p>
+            </div>
+        </div>
+    );
     if (!post) return null;
 
     return (
@@ -215,7 +316,7 @@ const BlogPostView: React.FC<{ slug: string }> = ({ slug }) => {
             <article className="post-view animate-scale-in">
                 <h1>{post.title}</h1>
                 <div className="post-meta-header">
-                    <span className="latest-update">Latest update: {post.latestUpdate}</span>
+                    <span className="latest-update">{content[currentLang].latestUpdate} {post.latestUpdate}</span>
                 </div>
                 <img 
                     src={post.bannerImagePath} 
@@ -224,7 +325,7 @@ const BlogPostView: React.FC<{ slug: string }> = ({ slug }) => {
                     onLoad={handleImageLoad}
                 />
                 <div className="post-content">
-                    {content}
+                    {postContent}
                 </div>
             </article>
         </div>
