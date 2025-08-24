@@ -16,8 +16,8 @@ export interface Post {
 // 5. Add the language field ('en' for English, 'zh' for Chinese).
 export const posts: Post[] = [
   {
-    slug: 'hello-world',
-    title: 'Hello World: My First Post',
+    slug: 'llm-settings',
+    title: 'Beyond the Black Box: A Comprehensive Guide to LLM Settings',
     bannerImagePath: 'https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?q=80&w=2089&auto=format&fit=crop',
     shortDescription: 'Join me on my first step into the world of blogging. Discover the why and how behind this new website.',
     markdownPath: 'blog/first-post.md',

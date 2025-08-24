@@ -1,5 +1,6 @@
 import React from 'react';
 import { posts, Post } from '../blog/_posts';
+import ReactMarkdown from 'react-markdown';
 
 // Image loading effect
 const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
@@ -55,24 +56,6 @@ const useLanguage = () => {
     }, []);
 
     return lang;
-};
-
-// A simple markdown to JSX parser
-const parseMarkdown = (markdown: string): React.ReactNode => {
-    const lines = markdown.split('\n');
-    const elements: React.ReactElement[] = [];
-    let key = 0;
-    for (const line of lines) {
-        if (line.startsWith('# ')) {
-            elements.push(<h1 key={key++}>{line.substring(2)}</h1>);
-        } else if (line.startsWith('## ')) {
-            elements.push(<h2 key={key++}>{line.substring(3)}</h2>);
-        } else if (line.trim() !== '') {
-            elements.push(<p key={key++}>{line}</p>);
-        }
-        // Empty lines are skipped, creating paragraph breaks
-    }
-    return <>{elements}</>;
 };
 
 interface HomeProps {
@@ -287,7 +270,16 @@ const BlogPostView: React.FC<{ slug: string; lang?: string }> = ({ slug, lang })
                 return response.text();
             })
             .then(text => {
-                setPostContent(parseMarkdown(text));
+                console.log('Markdown content received:', text);
+                console.log('Content length:', text.length);
+                console.log('Contains image tags:', text.includes('<img'));
+                console.log('Contains data:image:', text.includes('data:image'));
+                
+                setPostContent(
+                    <ReactMarkdown>
+                        {text}
+                    </ReactMarkdown>
+                );
                 setLoading(false);
             })
             .catch(err => {

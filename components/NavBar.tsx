@@ -119,7 +119,7 @@ export const NavBar: React.FC<NavBarProps> = ({ currentPage }) => {
                 <div className="nav-buttons">
                     {/* Language toggle button */}
                     <button 
-                        className="language-toggle"
+                        className="toggle-button language-toggle"
                         onClick={toggleLanguage}
                         aria-label={`Switch to ${isChineseMode ? 'English' : 'Chinese'} language`}
                     >
@@ -128,7 +128,7 @@ export const NavBar: React.FC<NavBarProps> = ({ currentPage }) => {
                     
                     {/* Theme toggle button */}
                     <button 
-                        className="theme-toggle"
+                        className="toggle-button theme-toggle"
                         onClick={toggleTheme}
                         aria-label={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
                     >
