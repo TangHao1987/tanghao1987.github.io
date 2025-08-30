@@ -287,7 +287,7 @@ const BlogPostView: React.FC<{ slug: string; lang?: string }> = ({ slug, lang })
                 setLoading(false);
             });
 
-    }, [slug, lang]);
+    }, [slug]); // Remove lang dependency to prevent re-fetching when language changes
 
     if (loading) return (
         <div className="container">
