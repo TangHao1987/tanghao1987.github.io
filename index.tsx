@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+// Import assets to ensure Vite includes them in the build
+import './assets';
 import { NavBar } from './components/NavBar';
 import { Home } from './components/Home';
 

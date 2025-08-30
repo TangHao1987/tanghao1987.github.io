@@ -1,6 +1,7 @@
 import React from 'react';
 import { posts, Post } from '../blog/_posts';
 import ReactMarkdown from 'react-markdown';
+import { profileImg } from '../assets';
 
 // Image loading effect
 const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
@@ -95,7 +96,7 @@ const HomeAndBlogView: React.FC<{ lang?: string }> = ({ lang }) => {
     // User can change these details
     const userName = content[currentLang].userName;
     const userBio = content[currentLang].userBio;
-    const profileImageUrl = "/assets/profile.jpg";
+    const profileImageUrl = profileImg;
     
     // Drawer state
     const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
