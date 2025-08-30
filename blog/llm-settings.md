@@ -16,7 +16,7 @@ Let's look at a simple example to see how this works:
 
 The sentence "**Hello there, my friend\!**" would be broken down by an AI into several tokens, such as:
 
-![sentence_to_token](/assets/llm_setting_img1.png)
+![sentence_to_token](assets/llm_setting_img1.png)
 
 Notice how some tokens, like **" there"** and **" my"**, include a space at the beginning. This is because the AI's tokenizer is designed to capture the spaces that separate words, which is crucial for the model to understand the structure of a sentence.
 
@@ -28,7 +28,7 @@ The word "**unbelievable**" might be split into:
 * **"bel"**  
 * **"ievable"**
 
-![sentence_to_token_2](/assets/llm_setting_img2.png)
+![sentence_to_token_2](assets/llm_setting_img2.png)
 
 This helps the AI handle new or long words more effectively, as it can learn from the patterns in these smaller parts.
 
@@ -42,7 +42,7 @@ For example, let's take the sentence "**Hello there, my friend\!**". The AI firs
 
 Next, it assigns a unique number to each of these tokens based on its internal dictionary. This process is called **tokenization**, and the resulting numbers are a numerical representation of the text.
 
-![token_id](/assets/llm_setting_img3.png)
+![token_id](assets/llm_setting_img3.png)
 
 This numbering allows the AI to work with the sentence not as a string of letters, but as a sequence of numbers.This numerical format is much easier for a computer to process and understand the relationships between words.
 

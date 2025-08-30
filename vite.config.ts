@@ -4,9 +4,8 @@ import { defineConfig, loadEnv } from 'vite';
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
     
-    // Check if we're building for GitHub Pages
-    const isGitHubPages = process.env.GITHUB_PAGES === 'true';
-    const base = isGitHubPages ? '/blog/' : '/';
+    // Always use root base path for simpler deployment
+    const base = '/';
     
     return {
       base,
