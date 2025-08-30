@@ -34,7 +34,7 @@
 
 简而言之，令牌是AI模型**观察**和**理解**语言的方式，它将语言分解成可管理、带数字的片段。我们可以把它想象成AI的字母表和词汇表的结合体。
 
-## 令牌ID
+## 令牌ID（token ID）
 
 从技术层面讲，AI会为每个令牌（token）分配一个数字。这个数字ID和token是完全1对1对应的。由于计算机计算数字的速度远远大于文字的速度，所以转化成数字可以大幅提高运算效率。
 
@@ -45,201 +45,192 @@ AI会先把句子分解成: "Hello", " there", ",", " my", " friend", "\!".
 
 ![token_id](assets/llm_setting_img3.png)
 
-This numbering allows the AI to work with the sentence not as a string of letters, but as a sequence of numbers.This numerical format is much easier for a computer to process and understand the relationships between words.
+由于AI天生对数字敏感，这么做能让AI不再把句子当成字母，而是一串数字。这样能让AI更容易处理和理解整个句子。
 
-# **Temperature**
+# 温度 （Temperature）
 
-When talking about **temperature** in an AI, we are referring to how much **creativity** or **randomness** it's allowed to have when it generates text. Think of it like a control dial that you can turn up or down.
+对于AI来说， **温度**的是它在生成文本时的**随机性**的程度。更高的温度能让AI更有创造性。
 
----
 
-### **Low Temperature (Predictable and Factual)**
+### 低温度 (可预测且基于事实)
+当温度较低时，AI会变得谨慎。在生成结果时，AI会偏向于选择更可能出现的下一个词语。这会使AI输出的结果变得更可预测、直接且安全。如果把AI比成人来说，学生在考试的时候通常为了得高分，会相对比较谨慎。
 
-When the temperature is **low**, the AI is being very cautious. It will almost always choose the next word that it thinks is the **most likely** to come next. This makes the AI's responses very **predictable**, **direct**, and **safe**.
+当我们需要AI做具体的工作的时候，比如帮学生解决数学题的时候，使用低温会比较适合。
 
-* **Analogy:** Imagine a student taking a multiple-choice test. With a low temperature, the student will always pick the answer they are 100% sure is correct.  
-* **Best for:** Tasks where you want a very specific, factual answer, such as summarizing a document, answering a question about history, or writing a professional email.
+### 高温度 (富有创造力且多样化)
+当温度较高时，AI会更有可能选择可能性比较低的词，这会让AI的输出有更多随机性和多样性。 这就好比一个创意作家为了他的作品在进行头脑风暴的时候，他不会仅仅选择简单明了的词汇；也有可能会考虑许多不同的选项，以寻找独特而有趣的东西。
 
----
+调高温度最适合于让AI执行创意相关的任务，例如写诗、创作故事。
 
-### **High Temperature (Creative and Diverse)**
+简而言之，低温度为您带来确定性和事实，而高温度则带来创造性和多样性。
 
-When the temperature is **high**, the AI gets more adventurous. It is more willing to choose a word that isn't the most probable one. This introduces **randomness** and **variety** into the AI's output.
 
-* **Analogy:** Think of a creative writer brainstorming ideas. They don't just go with the most obvious word; they consider many different options to find something unique and interesting.  
-* **Best for:** Creative tasks like writing a poem, creating a story, or brainstorming new ideas, where you want a less predictable and more imaginative result.
+### 举个例子
 
-In short, **low temperature** gives you **certainty** and **facts**, while **high temperature** gives you **creativity** and **variety**.
+如果我门问AI：“天空为什么是蓝色的？”
 
----
+如果温度较低，AI可能会以下边的概率生成下一个词：
 
-### **Example** 
+- 瑞利散射 (95%)
+- 光 (2%)
+- 反射 (1%)
+- 吸收 (1%)
+- 某个东西 (0.5%)
 
-Let’s say we ask the AI a question, “why is the sky blue?”
+结果句子将是：“天空之所以是蓝色的，是因为一个被称为瑞利散射的过程。”
 
-When the temperature is low, the AI plays it safe. It will almost certainly choose the word with the highest probability. The next words that AI might come out could be:
+然而，当温度较高时，AI可能产生的下一个词语的概率就会变成：
+- 瑞利散射 (60%)
+- 光 (15%)
+- 反射 (10%)
+- 太阳光 (5%)
+- 大气的 (5%)
 
-* **Rayleigh scattering (95% chance)**  
-* light (2% chance)  
-* reflection (1% chance)  
-* absorption (1% chance)  
-* something (0.5% chance)
+这会让AI可能生成下边的结果：
+- “天空之所以是蓝色的，是因为一个被称为瑞利散射的过程。”（仍然是最有可能的，但无法保证）
+- “天空之所以是蓝色的，是因为光在大气中发生了散射。”（一个略有不同但仍然正确的解释）
+- “天空之所以是蓝色的，是因为一个被称为反射的过程，因为微小的空气分子反射了太阳的蓝光。”（一个不那么精确但仍然合理的解释）
+- “天空之所以是蓝色的，是因为太阳光与大气的相互作用。”（一个更具诗意、不那么技术的回答）
+TOP-P
+TOP-P，也称为原子核采样 (nucleus sampling)，是另一种控制AI在生成文本时创造力的方式。温度会改变每个可能出现的下一个词语的概率，而TOP-P则专注于将选择范围缩小到最可能的那些词语。
 
-**The resulting sentence will be:** "The sky is blue because of a process called **Rayleigh scattering**."
 
-However, when the temperature is high, the AI is more adventurous. It is less concerned with the most probable word and is more willing to pick from the other, less likely options, leading to more creative and diverse outputs. The next words that AI might come out could be:
+## TOP-P 的工作原理
 
-* **Rayleigh scattering (60% chance)**  
-* **light (15% chance)**  
-* **reflection (10% chance)**  
-* **sunlight's (5% chance)**  
-* **atmosphere's (5% chance)**
+现在我门来聊聊TOP-P。每次AI生成下一个词的时候，AI都会先生成一个可能的下一个词语的列表，表里的每个词语都有其被选中的概率。使用TOP-P时，AI只会考虑列表顶部的词语，直到它们的**累积概率**达到某个设定的百分比。
 
-This will result:
+低 TOP-P： 假设我们把TOP-P设置为10%。AI只会查看累积概率达到10%的最可能的词语。这使得AI从一个非常小且确定的词语组中进行选择。输出将非常安全且基于事实。
 
-* "The sky is blue because of a process called **Rayleigh scattering**." (Still the most likely, but not guaranteed)  
-* "The sky is blue because of a process called **light** scattering by the atmosphere." (A slightly different, but still correct, explanation)  
-* "The sky is blue because of a process called **reflection**, as the tiny air molecules reflect the sun's blue light." (A less precise, but still plausible, explanation)  
-* "The sky is blue because of a process called **the sunlight's** interaction with the atmosphere." (A more poetic, less technical answer)
+高 TOP-P： 如果您将TOP-P设置为90%，AI会从列表顶部考虑一个更大的词语组，其中包含许多可能性较低的词语。这给了AI更多的选择，从而产生更多样化和创造性的输出。
 
-# **TOP-P**
+### 举个例子
+让我们使用上面相同的例句作为例子。“天空为什么是蓝色的？”
+这时候假设温度是0.8 那AI可能产生的下一个词语是：
 
-TOP-P, also known as **nucleus sampling**, is another way to control how creative an AI is when generating text. While **temperature** changes the likelihood of every possible next word, **TOP-P** focuses on narrowing down the choices to the most probable ones.
+- 瑞利散射 (60%)
+- 光 (15%)
+- 反射 (10%)
+- 太阳光 (5%)
+- 大气的 (5%)
 
----
+...
 
-### **How TOP-P Works**
+由此，我门能算出AI的累积概率：
 
-Imagine the AI has a list of possible next words for a sentence, each with its own probability (how likely it is to be chosen). With TOP-P, the AI will only consider the words at the top of this list until their **combined probability** reaches a certain percentage.
+瑞利散射 (60%) => 累积概率 60%
 
-* **Low TOP-P:** Let's say you set TOP-P to 0.1 (or 10%). The AI will only look at the most likely words that add up to 10% of the total probability. This results in the AI choosing from a very small, certain group of words. The output will be very **safe** and **factual**.  
-* **High TOP-P:** If you set TOP-P to 0.9 (or 90%), the AI will consider a much larger group of words from the top of the list, including many that are less likely. This gives the AI more options to choose from, leading to more **diverse** and **creative** outputs.
+光 (15) => 累积概率 75%
 
----
+反射 (10%) => 累积概率 85%
 
-### **Example** 
+太阳光 (5%) => 累积概率 90%
 
-Let’s use the example when the temperature is 0.8 above
+大气的 (5%) => 累积概率 95%
 
-Recap the next words that AI might come out could be:
+...
 
-* **Rayleigh scattering (60% chance)**  
-* **light (15% chance)**  
-* **reflection (10% chance)**  
-* **sunlight's (5% chance)**  
-* **atmosphere's (5% chance)**  
-* **…**
+假设我们设置了一个低的TOP-P（0.3）。在这种情况下，AI的“围栏”会放置在“瑞利散射”这个词之后，因为它的累积概率是60%。这意味着AI只考虑瑞利散射这个词语。
 
-With this example, AI calculates the combined probability as:
+但当我们设置一个高的TOP-P（0.9）时，AI会考虑所有直到“太阳光”的词语，因为它们的累积概率（60% + 15% + 10% + 5% = 90%）低于90%的阈值。输出可能是“瑞利散射”、“光”、“反射”或“太阳光”。
 
-* **Rayleigh scattering (60% chance) \=\>** combined probability 60%  
-* **light (15% chance) \=\>** combined probability 75%   
-* **reflection (10% chance) \=\>** combined probability 85%  
-* **sunlight's (5% chance) \=\>** combined probability 90%  
-* **atmosphere's (5% chance) \=\>** combined probability 95%  
-* …
+TOP-P 与温度的区别
+TOP-P和温度的主要区别在于它们影响词语选择的方式。
 
-Let’s say we set a low TOP-P (0.3). In this case, the AI's "fence" is placed after the word "Rayleigh scattering", since its **cumulative probability** is 60%. This means the AI only considers word **Rayleigh scattering** .
+温度改变了所有可能出现的词语的概率。它使不太可能的词语变得更有可能，而最可能的词语变得不那么可能。
 
-But when we set a high TOP-P (0.9), the AI would consider all the words up to "sunlight's," as their combined probability (60% \+ 15% \+ 10% \+ 5% \= 90%) is below the 90% threshold. The output could be “Rayleigh scattering”, "light", "reflection", or "sunlight's". 
+TOP-P完全移除了那些最不可能的词语的考虑。这就像在最可能的选项周围设置一个围栏，并告诉AI只在这个围栏内进行选择。
 
-# **Difference between TOP-P and Temperature**
+由于这两种控制都旨在调整AI的创造力，通常建议一次只调整其中一个以获得最佳结果。您通常会使用低 TOP-P来处理基于事实的任务，而使用高 TOP-P来处理创意任务。
 
-The main difference between TOP-P and temperature is how they affect the word choices.
+最大长度 (Max Length)
+最大长度参数用于控制模型生成的词语（token）的数量。当模型达到此参数的限制时，它将立即停止生成更多词语。
 
-* **Temperature** changes the probabilities of *all* possible words. It makes the unlikely words a bit more likely, and the most likely words a bit less likely.  
-* **TOP-P** completely **removes** the least likely words from consideration. It's like putting a fence around the most probable options and telling the AI to only choose from within that fence.
+请注意，模型不够智能，无法根据此参数来总结或结束其思想以适应限制；它只是在达到最大值后简单地停止生成词语。
 
-Because both controls are designed to adjust the AI's creativity, it's generally recommended to only adjust one at a time for the best results. You'd typically use a **low TOP-P** for factual tasks and a **high TOP-P** for creative ones.
+这可能导致不完整的句子或短语。例如，如果您将最大长度设置为一个很小的数字，而模型正在生成一个长句子，那么输出会突然结束。这是一个硬性限制，而不是对模型“收尾”的建议。
 
-# **Max Length** 
+例如，如果模型正在生成以下句子：
 
-Max Length parameter is used to control the length of the token that model generated. When the model hits the limit of this parameter, it will stop generating more tokens immediately. 
+"The quick brown fox jumps over the lazy dog." (敏捷的棕色狐狸跳过懒惰的狗。)
 
-Note the model is not smart enough based on this parameter to summarize or conclude its thoughts in a way that fits within the constraint; it simply stops generating tokens once the maximum is reached..
+...而您的最大长度设置为5，输出可能如下：
 
-This can result in incomplete sentences or phrases. For instance, if you set `max length` to a small number and the model is in the middle of generating a long sentence, the output will abruptly end. It's a hard limit, not a suggestion for the model to "wrap up."
+"The quick brown fox jumps..." (敏捷的棕色狐狸跳过...)
 
-For example, if the model is generating the sentence: 
+您可能会问，既然这个参数可能导致突然中断，为什么我们还需要它？
 
-"The quick brown fox jumps over the lazy dog."
+这是因为模型可能会进入“幻觉循环”，无限期地生成无意义或重复的内容。一个合理的“最大长度”值可以帮助我们确保在限制内得到正常输出，并消除提示生成大规模、非预期响应的风险。
 
-... and your `max length` is set to 5, the output might be: 
+停止序列 (Stop sequence)
+停止序列是另一种控制模型何时停止输出的方式。与硬性限制不同，停止序列会在模型输出特定模式时停止。这使我们能够对模型输出进行更细粒度的控制，还可以防止模型在结构化数据之后添加额外的评论或叙述，这可能会破坏我们的解析代码。
 
-"The quick brown fox jumps..."
+停止序列的潜在用例
+以下是停止序列的一些常见用例：
 
-You may ask, as this parameter can lead to abrupt cut-offs, why do we need this parameter?
+JSON 或 XML: 当要求模型生成一个JSON对象时，我们可以将停止序列设置为闭合标签，例如}或</xml>。
 
-This is because the model may enter a “hallucination loop”, where it generates nonsensical or repetitive content indefinitely. A reasonable max length value could help us to ensure the normal output within the limit, and eliminate the risk for the prompts to generate a massive, unintended response. 
+代码生成: 当要求LLM生成代码片段时，您可以使用像``````这样的停止序列来确保它在代码块之后停止。
 
-# **Stop sequence**
+列表和项目符号: 如果我们想要一个特定项目数量的列表，我们可以使用停止序列来控制。例如，如果您想要一个包含10个项目的列表，您可以使用 "11." 作为停止序列。
 
-`Stop sequence` is another way to control when the model stops output. Instead of a hard limit, stop sequences stop when the model outputs a specific pattern. This gives us more granular control over the model output, also prevents the model from adding extra commentary or a narrative after the structured data, which could break our parsing code
+对话系统: 在多轮聊天或对话中，我们可以使用另一方的名字作为停止序列（例如，User: 或 Customer:）。这会告诉模型停止为一方生成响应，并等待下一轮，从而防止它扮演另一方的角色。
 
-### **Potential use cases of stop sequence**
+频率惩罚 (Frequency Penalty)
+频率惩罚会根据一个词语已经出现的次数来阻止模型重复使用它。可以把它想象成一种累积惩罚：一个词语被使用的次数越多，它再次被选中的可能性就越低。
 
-Below are a few common use cases of the the stop sequence:
+模型会为每个可能的下一个词语分配一个数值，称为对数几率 (logit)。较高的对数几率分数意味着这个词语更有可能被选中。频率惩罚通过每次使用一个词语时降低它的对数几率分数来起作用。惩罚会应用于词语的每一次出现，因此一个出现过三次的词语会比只出现过一次的词语受到更重的惩罚。这个功能特别有用，当您希望允许一些常用词语的重复，但又要防止某个特定词语被过度使用时。
 
-* **JSON or XML:** When asking the model to generate a JSON object, we can set the stop sequence to the closing tag, such as `}` or `</xml>`.  
-* **Code Generation:** When asking an LLM to generate a code snippet, you can use a stop sequence like \`\`\`\` to ensure it stops after the code block.  
-* **Lists and Bullet Points:** If we want a list with a specific number of items, we can use a stop sequence to control that. For example, if you want a list of 10 items, you can use `"11."` as the stop sequence.  
-* **Dialogue Systems:** In a multi-turn chat or dialogue, we can use the other speaker's name as a stop sequence (e.g., `User:` or `Customer:` ). This tells the model to stop generating the response for one speaker and wait for the next turn, preventing it from role-playing as the other party.
+例如，
 
-# **Frequency Penalty**
+让我们考虑模型最初想要生成这个句子：
 
-Frequency penalty discourages the model from repeating a word based on how many times it has already appeared. Think of it as a cumulative penalty: the more a word is used, the more its chance of being chosen again decreases.
+The cat sat on the mat, and the dog barked at the cat, which then ran away from the cat.
+（这只猫坐在垫子上，狗冲着这只猫叫，然后这只猫跑开了。）
 
-The model assigns a numerical score, called a **logit**, to each potential next word. A higher logit score means the word is more likely to be chosen. Frequency penalty works by lowering a word's logit score each time it is used. The penalty is applied for every occurrence of a word, so a word that has appeared three times will be penalized more heavily than a word that has appeared just once. This feature is particularly useful when you want to allow for some repetition of common words but prevent a single word from being overused.
+当我们对“猫”（cat）这个词应用频率惩罚时，可能会发生以下情况：
 
-For example, 
+第一次出现： 模型使用了“猫”。“猫”的惩罚开始累积。
 
-Let’s consider that originally the model wants to generate this sentence
+第二次出现： 模型想再次使用“猫”。现在惩罚被应用了，但很小，所以“猫”这个词仍然是一个高概率的选择。模型再次选择了“猫”。
 
- *The **cat** sat on the mat, and the dog barked at the **cat**, which then ran away from the **cat**.*
+第三次出现： 模型现在考虑第三次使用“猫”。惩罚已经累积，使得这个词语的概率显著降低。模型现在选择了一个同义词，比如“它”，以避免强烈的惩罚。
 
-When we apply a Frequency penalty on the word "cat," this is what might happen:
+这产生了一个显示惩罚增加效果的输出：
 
-* **1st Occurrence:** The model uses 'cat.' The penalty for 'cat' begins to accumulate.  
-* **2nd Occurrence:** The model wants to use "cat" again. A penalty is now applied, but it's small, so the word "cat" is still a very high-probability choice. The model chooses "cat" again.  
-* **3rd Occurrence:** The model now considers using "cat" a third time. The penalty has accumulated, making the word's probability significantly lower. The model now chooses a synonym like "it" to avoid the strong penalty.
+The cat sat on the mat, and the dog barked at the cat, which then ran away from it.
+（这只猫坐在垫子上，狗冲着这只猫叫，然后它跑开了。）
 
-*This yields an output that shows the penalty's increasing effect:* 
+存在惩罚 (Presence Penalty)
+另一方面，存在惩罚会阻止模型在一个词语第一次出现后再次使用它。这种惩罚是一次性扣除。一旦一个词语被使用过，它的对数几率分数就会被降低，并且无论之后这个词语被使用了多少次，惩罚都会保持不变。
 
-*`The cat sat on the mat, and the dog barked at the cat, which then ran away from it.`*
+与频率惩罚类似，存在惩罚会降低一个词语的对数几率分数。然而，这种降低只在词语第一次被生成时发生一次。这使其成为一个强大的工具，用于鼓励更广泛的词汇量，并防止任何一个词语被重复，无论它被使用了多少次。
 
----
+让我们使用相同的例子：
 
-# **Presence Penalty**
+The cat sat on the mat, and the dog barked at the cat, which then ran away from the cat.
+（这只猫坐在垫子上，狗冲着这只猫叫，然后这只猫跑开了。）
 
-Presence penalty, on the other hand, discourages the model from using a word at all after its first appearance. This penalty is a one-time deduction. Once a word has been used, its logit score is reduced, and that penalty remains the same regardless of how many times the word is used afterward.
+对“猫”（cat）这个词应用存在惩罚时，可能会发生以下情况：
 
-Similar to frequency penalty, presence penalty reduces a word's **logit** score. However, this reduction happens only once when the word is first generated. This makes it a strong tool for encouraging a wider vocabulary and preventing any single word from being repeated, no matter how many times it has been used.
+第一次出现： 模型使用了“猫”。一个显著的、一次性的惩罚立即应用于“猫”这个词，使其再次被选中的可能性变得极低。
 
-Let’s use the same example 
+第二次出现： 模型想再次使用“猫”。存在惩罚已经应用，使得像“它”或同义词“猫科动物”这样的词语更有可能。模型选择了“它”。
 
- *The **cat** sat on the mat, and the dog barked at the **cat**, which then ran away from the **cat**.*
+第三次出现： “猫”这个词已经使用过，并且仍然受到第一次使用时所施加的相同的高额惩罚。它再次被选中的可能性非常低。
 
-*With a presence penalty on the word "cat," this is what might happen:*
+这产生了模型更简洁、更多样化的输出：
 
-* ***1st Occurrence:** The model uses "cat." A significant, one-time penalty is immediately applied to the word "cat," making it highly unlikely to be chosen again.*  
-* ***2nd Occurrence:** The model wants to use "cat" again. The presence penalty has already been applied, making a different word like "it" or a synonym like "feline" far more probable. The model chooses "it."*  
-* ***3rd Occurrence:** The word "cat" has already been used and is still subject to the same high penalty from the first time. It is very unlikely to be chosen again.*
+The cat sat on the mat, and the dog barked at it, which then ran away from the feline.
+（这只猫坐在垫子上，狗冲着它叫，然后这只猫科动物跑开了。）
 
-*This yields a more concise and diverse output from the model:* 
+主要区别与总结
+两者之间的核心区别在于它们的累积性。频率惩罚就像是随着每一次违规而增加的累积罚款，而存在惩罚则是一次性的永久罚款。
 
-*`The cat sat on the mat, and the dog barked at it, which then ran away from the feline.`*
+频率惩罚按出现次数进行惩罚，非常适合减少过度重复。
 
----
+存在惩罚按词语进行惩罚，是一种更激进的方式，可以鼓励多样化的词汇。
 
-# **Key Differences and Summary**
+在实践中， 一般建议只使用频率惩罚或存在惩罚，而不要同时使用。
 
-The core difference between the two lies in their cumulative nature. Frequency penalty is like a recurring fine that increases with each violation, while presence penalty is a single, permanent fine.
-
-* Frequency Penalty penalizes per occurrence, making it great for reducing excessive repetition.  
-* Presence Penalty penalizes per word, making it a more aggressive way to encourage a diverse vocabulary.
-
-**Note in practice,** the general recommendation is to only use the frequency or presence penalty but not both. 
-
-# **Extension: Beyond the Basics**
-
-With a clear understanding of these core parameters, you are now equipped to move beyond basic prompt usage. This knowledge empowers you to approach LLM APIs not just as black boxes, but as finely tunable instruments. The real value lies in being able to diagnose why an AI's output might be repetitive or uncreative, and confidently experiment with different settings, tailoring the AI's behavior to complex tasks.
+扩展：超越基础
+通过对这些核心参数的清晰理解，您现在已经具备了超越基本提示使用的能力。这些知识使您能够将LLM API不再视为黑盒，而是可进行精细调整的工具。真正的价值在于能够诊断为什么AI的输出可能是重复的或缺乏创造性，并自信地尝试不同的设置，从而根据复杂的任务调整AI的行为。
