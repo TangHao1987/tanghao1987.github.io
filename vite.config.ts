@@ -4,8 +4,9 @@ import { defineConfig, loadEnv } from 'vite';
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
     
-    // Use different base paths for development vs production
-    const base = mode === 'production' ? '/blog/' : '/';
+    // Check if we're building for GitHub Pages
+    const isGitHubPages = process.env.GITHUB_PAGES === 'true';
+    const base = isGitHubPages ? '/blog/' : '/';
     
     return {
       base,
@@ -19,12 +20,8 @@ export default defineConfig(({ mode }) => {
         }
       },
       build: {
-        assetsDir: 'assets',
-        rollupOptions: {
-          output: {
-            assetFileNames: 'assets/[name].[ext]'
-          }
-        }
+        outDir: 'dist',
+        assetsDir: 'assets'
       }
     };
 });
