@@ -16,7 +16,7 @@
 
 假设我们现在在LLM里输入 "**Hello there, my friend\!**"，AI会把这个句子分解成下边几个令牌:
 
-![sentence_to_token](assets/llm_setting_img1.png)
+![sentence_to_token](/assets/llm_setting_img1.png)
 
 我们可以注意到有些令牌，比如说 **" there"** 和 **" my"**，他们前缀是个空格。这正是因为AI的标记器（tokenizer）一开始就被设计成能捕捉到用空格开分词，这些空格对模型能够理解整句话有至关重要的意义。
 
@@ -28,7 +28,7 @@
 * **"bel"**  
 * **"ievable"**
 
-![sentence_to_token_2](assets/llm_setting_img2.png)
+![sentence_to_token_2](/assets/llm_setting_img2.png)
 
 这种把一个单词分解成多个令牌的方式，有助于AI更有效地处理新词或长词。因为AI可以用这些更小的组成部分（前缀或者后缀）来学习单词。
 
@@ -43,7 +43,7 @@ AI会先把句子分解成: "Hello", " there", ",", " my", " friend", "\!".
 
 然后根据预设的数字映射，给每个令牌一个完全唯一的数字ID。这整个过程叫做**tokenization**。
 
-![token_id](assets/llm_setting_img3.png)
+![token_id](/assets/llm_setting_img3.png)
 
 由于AI天生对数字敏感，这么做能让AI不再把句子当成字母，而是一串数字。这样能让AI更容易处理和理解整个句子。
 

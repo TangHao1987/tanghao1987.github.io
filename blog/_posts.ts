@@ -1,5 +1,3 @@
-import { llmSettingsHeader, llmJpeg } from '../assets';
-
 export interface Post {
   slug: string;
   title: string;
@@ -20,7 +18,7 @@ export const posts: Post[] = [
   {
     slug: 'llm-settings',
     title: 'Beyond the Black Box: A Comprehensive Guide to LLM Settings',
-    bannerImagePath: llmSettingsHeader,
+    bannerImagePath: '/assets/llm_settings_header.png',
     shortDescription: 'Dive deep into LLM API parameters—including Temperature, TOP-P, Max Length, Stop Sequence, Frequency Penalty, and Presence Penalty.',
     markdownPath: 'blog/llm-settings.md',
     latestUpdate: '2025-08-24',
@@ -29,7 +27,7 @@ export const posts: Post[] = [
   {
     slug: 'llm-settings-zh',
     title: '大语言模型基础参数详解',
-    bannerImagePath: llmSettingsHeader,
+    bannerImagePath: '/assets/llm_settings_header.png',
     shortDescription: '深入探讨大语言模型（LLM）API中的基础参数设置，包括Temperature、TOP-P、Max Length、Stop Sequence、Frequency Penalty和Presence Penalty。',
     markdownPath: 'blog/llm-settings-zh.md',
     latestUpdate: '2025-08-24',
@@ -38,7 +36,7 @@ export const posts: Post[] = [
   {
     slug: 'understanding-large-language-models',
     title: 'Understanding Large Language Models',
-    bannerImagePath: llmJpeg,
+    bannerImagePath: '/assets/understanding-llm/LLM.jpeg',
     shortDescription: 'A comprehensive guide to understanding large language models.',
     markdownPath: 'blog/understanding-large-language-models.md',
     latestUpdate: '2025-08-30',

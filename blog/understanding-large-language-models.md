@@ -14,7 +14,7 @@ The structure of traditional neural networks is simple; they're normally formed 
 
 - **Output Layer**: Produces the final result, for instance, probabilities for "cat" or "dog" in image classification.
 
-![forward neural network](assets/understanding-llm/forward.gif)
+![forward neural network](/assets/understanding-llm/forward.gif)
 
 The functionality of the traditional network is to **extract high-level features from the raw input data**. These networks proved revolutionary for tasks such as image recognition, pattern classification, and data clustering, making significant strides in areas where data points were relatively independent. However, they faced inherent limitations, particularly in handling sequential data, as they lacked a mechanism to 'remember' past inputs.
 
@@ -34,7 +34,7 @@ The functionality of RNNs is to process sequential data and capture temporal dep
 
 This innovation allowed them to understand context and order within data, making significant strides in areas like natural language processing where the sequence of information is crucial. However, despite this advancement, RNNs still faced considerable challenges, particularly in retaining information over very long sequences and their inherent difficulty with parallel computation.
 
-![rnn](assets/rnn.png)
+![rnn](/assets/rnn.png)
 
 ## The Sequence Revolution: Transformer and Large Language Models (LLM)
 To overcome RNNs' limitations, particularly the long-range dependency and parallel computation problems, Google introduced the **Transformer architecture** in 2017. It fundamentally revolutionized the field of sequence processing and became the cornerstone of all modern LLMs. The Transformer abandons the recurrent structure and relies entirely on the **Self-Attention** Mechanism. This allows the model to **Process entire input sequences in parallel** and **directly capture long-range dependencies**.
@@ -46,7 +46,7 @@ This means the LLM has the capability to calculate relationships between all wor
 
 The heart of an LLM is a massive neural network, primarily based on the Transformer architecture. 
 
-![forward neural network](assets/understanding-llm/transformer.png)
+![forward neural network](/assets/understanding-llm/transformer.png)
 
 The diagram above illustrates the basic Transformer architecture. It primarily consists of an Encoder and a Decoder (many LLMs, like the GPT series, predominantly use the decoder part). You can see, the encoder and decoder are formed by the similar components: **Multi-head Attention**, **Add & Norm** and **Feed Forward** .
 
@@ -58,7 +58,7 @@ To achieve this, each input word's embedding vector is transformed into three di
 - **Value Vector (V)**: Imagine it as "actual information." It contains the specific content of the current word.
 Let's use a concrete example to understand the information contained within Q, K, and V vectors:
 
-![embedding](assets/understanding-llm/embedding.png)
+![embedding](/assets/understanding-llm/embedding.png)
 
 Let's use this sentence as an example
 
@@ -73,7 +73,7 @@ When the model processes the word "apple":
   - Vapple​ might contain: "My specific meaning is a red or green fruit."
   - Vis​ might contain: "My specific meaning is to establish equivalence."
 
-![multi head attention](assets/understanding-llm/attention.png)
+![multi head attention](/assets/understanding-llm/attention.png)
 
 #### Weight Calculation Process
 
@@ -89,12 +89,12 @@ Weighted Sum: The model uses these weights to perform **a weighted sum of the V 
 ### Feed Forward Network
 The feed-forward network is a simple **two-layer or multi-layer "traditional" neural network**, similar to what we discussed earlier. Its core role is to perform independent and non-linear feature transformation and information refinement on the attention output for each position (i.e., each Token). After the self-attention mechanism captures global relationships between words and aggregates contextual information, the feed-forward network conducts a deeper level of "local fine-tuning" and "information distillation" for each Token's representation. It uses non-linear transformations to convert the abstract information obtained from the attention layer into richer, more useful feature representations. You can think of the self-attention mechanism as capturing "global relationships," packaging all relevant information for each word. The feed-forward network then "locally processes" this packaged information for each word, further enhancing its semantic representation. It indeed performs deeper "extraction" and "transformation" of information, but this extraction occurs after the attention mechanism has already aggregated global contextual information and is applied independently to each Token.
 
-![softmax](assets/understanding-llm/feed_forward.png)
+![softmax](/assets/understanding-llm/feed_forward.png)
 
 ### Add & Norm
 Add & Norm is a structure that helps solve a typical deep learning problem called the **vanishing gradient problem**. The main issue is that after the signal propagates through multiple layers, the changes to the weights become extremely small, which causes learning to become very slow. Hence, adding this **Add & Norm** step provides "shortcuts" that allow the gradient to bypass one or more layers, preventing it from decaying. You can see that all the `Multi-head Attention` and `Feed Forward Network` in the architecture diagram have this structure.
 
-![forward neural network](assets/understanding-llm/add_norm.png)
+![forward neural network](/assets/understanding-llm/add_norm.png)
 
 ## How LLM "talks": LLM Inference Mechanism
 With a grasp of these components, understanding inference becomes straightforward: The input text is converted into vectors via the word embedding layer, then fed into the Transformer's decoder (or a pure decoder architecture). Within each multi-head self-attention layer, the input vectors are transformed into Query (Q), Key (K), and Value (V) vectors using trained weight matrices as described in the previous session. Multiple "heads" then independently calculate attention scores, determining dynamic weights based on the relationships between these Q and K vectors across the entire input sequence. These dynamic weights are then used to create a weighted sum of the V vectors. This process, repeated across successive layers of self-attention, Add & Norm, and Feed Forward, ultimately generates a **Context Vector** rich in contextual information.
@@ -103,7 +103,7 @@ After that, the context will be passed into a **Linear Layer**, that will transf
 
 Finally, the model passes raw scores (logits) into a **Softmax function**, which converts them to a probability distribution (with values between 0 and 1), where all values sum to 1. Each word in the vocabulary now possesses a specific probability, indicating its likelihood of being the next word. Then, based on parameters like `temperature` and `top-P`, the model selects a word accordingly. This completes the generation of **one token**.
 
-![softmax](assets/understanding-llm/softmax.png)
+![softmax](/assets/understanding-llm/softmax.png)
 
 This process repeats, with the newly selected token being added to the input sequence, until the model generates a pre-defined stop token or reaches its maximum token limit.
 
