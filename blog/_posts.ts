@@ -41,5 +41,14 @@ export const posts: Post[] = [
     markdownPath: 'blog/understanding-large-language-models.md',
     latestUpdate: '2025-08-30',
     language: 'en',
-  }
+  },
+    {
+    slug: 'transformer_qkv-zh.md',
+    title: '一次讲清楚大语言模型（transformer）的工作原理',
+    bannerImagePath: 'assets/transformer/header.png',
+    shortDescription: '尝试用简单的语言一次性讲清楚大语言模型的结构，及构架中每一层的工作原理',
+    markdownPath: 'blog/transformer_qkv-zh.md',
+    latestUpdate: '2025-08-24',
+    language: 'zh',
+  },
 ];

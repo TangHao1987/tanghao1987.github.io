@@ -1,6 +1,7 @@
 import React from 'react';
 import { posts, Post } from '../blog/_posts';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 // Image loading effect
 const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
@@ -276,7 +277,7 @@ const BlogPostView: React.FC<{ slug: string; lang?: string }> = ({ slug, lang })
                 console.log('Contains data:image:', text.includes('data:image'));
                 
                 setPostContent(
-                    <ReactMarkdown>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
                         {text}
                     </ReactMarkdown>
                 );
