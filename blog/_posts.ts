@@ -48,7 +48,7 @@ export const posts: Post[] = [
     bannerImagePath: 'assets/transformer/header.png',
     shortDescription: '尝试用简单的语言一次性讲清楚大语言模型的结构，及构架中每一层的工作原理',
     markdownPath: 'blog/transformer_qkv-zh.md',
-    latestUpdate: '2025-08-24',
+    latestUpdate: '2025-09-07',
     language: 'zh',
   },
 ];
