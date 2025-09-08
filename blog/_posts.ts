@@ -42,7 +42,7 @@ export const posts: Post[] = [
     latestUpdate: '2025-08-30',
     language: 'en',
   },
-    {
+  {
     slug: 'transformer_qkv-zh.md',
     title: '一次讲清楚大语言模型（transformer）的工作原理',
     bannerImagePath: 'assets/transformer/header.png',
